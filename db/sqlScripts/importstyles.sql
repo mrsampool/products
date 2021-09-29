@@ -1,0 +1,1 @@
+\COPY styles FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/styles.csv' DELIMITER ',' CSV HEADER;

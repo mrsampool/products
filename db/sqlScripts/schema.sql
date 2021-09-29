@@ -5,10 +5,8 @@ CREATE TABLE products (
   name VARCHAR(50),
   slogan VARCHAR(125),
   description VARCHAR(500),
-  category_id INTEGER,
-  default_price VARCHAR(10),
-  default_photo INTEGER,
-  default_style INTEGER
+  category VARCHAR(50),
+  default_price VARCHAR(10)
 );
 
 CREATE TABLE styles (
@@ -17,12 +15,12 @@ CREATE TABLE styles (
   name VARCHAR(100),
   original_price VARCHAR(15),
   sale_price VARCHAR(15),
-  default_ BOOLEAN,
-  default_photo INTEGER
+  default_ BOOLEAN
 );
 
 CREATE TABLE features (
   id INTEGER NOT NULL PRIMARY KEY,
+  product_id INTEGER,
   feature VARCHAR(80),
   value VARCHAR(255)
 );
@@ -30,7 +28,7 @@ CREATE TABLE features (
 CREATE TABLE skus (
   id INTEGER NOT NULL PRIMARY KEY,
   style_id INTEGER,
-  size VARCHAR(5),
+  size VARCHAR(10),
   quantity INTEGER
 );
 
