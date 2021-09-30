@@ -1,0 +1,1 @@
+\COPY photos FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/photos-edited.csv' DELIMITER ',' CSV HEADER;
