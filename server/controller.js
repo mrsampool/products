@@ -17,7 +17,7 @@ module.exports = {
     products.queryById(req.params.product_id)
     .then( data => {
       console.log(data.rows);
-      res.status(200).send(data.rows)
+      res.status(200).send(data.rows[0])
     })
     .catch( err => console.log(err) );
   },

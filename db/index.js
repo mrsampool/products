@@ -8,7 +8,7 @@ const { dbConfig } = require('./config.js');
 const pool = new Pool(dbConfig);
 
 pool.connect()
-.then( console.log('connected!') )
+.then( console.log('\nConnected to PG!', '🐘🥜') )
 .catch( err => console.log( err ));
 
 module.exports.pool = pool;
