@@ -11,4 +11,8 @@ app.use( (req, res, next)=>{
 
 app.use('/', router);
 
-app.listen(port, ()=> console.log('I\'m listening!') );
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, ()=> console.log('I\'m listening!') );
+}
+
+module.exports.app = app;
