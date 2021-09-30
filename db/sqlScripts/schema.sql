@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS products, features, styles, skus, categories;
+DROP TABLE IF EXISTS products, features, styles, skus, categories, photos;
 
 CREATE TABLE products (
   id INTEGER NOT NULL PRIMARY KEY,
@@ -36,3 +36,16 @@ CREATE TABLE categories (
   id INTEGER NOT NULL PRIMARY KEY,
   category VARCHAR(80)
 );
+
+CREATE TABLE photos (
+  id INTEGER NOT NULL PRIMARY KEY,
+  style_id INTEGER,
+  url VARCHAR(600),
+  thumbnail_url VARCHAR(600)
+);
+
+\COPY products FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/products.csv' DELIMITER ',' CSV HEADER;
+\COPY styles FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/styles.csv' DELIMITER ',' CSV HEADER;
+\COPY skus FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/skus.csv' DELIMITER ',' CSV HEADER;
+\COPY features FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/features.csv' DELIMITER ',' CSV HEADER;
+\COPY photos FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/photos-edited.csv' DELIMITER ',' CSV HEADER;
