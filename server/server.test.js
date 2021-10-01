@@ -155,20 +155,24 @@ describe('GET /:product_id/styles', ()=>{
         expect( Array.isArray( result[photos] ) ).toBe( true );
       });
 
-      describe('"skus" entry object', async ()=>{
-        const response = await request(app).get('/5/styles');
-        const sku = response.body.results[0].skus['25'];
+      describe('"skus" entry', ()=>{
 
-        [
-          ['quantity', 'number'],
-          ['size', 'string'],
+        it('should be an object with the correct properties', async()=>{
+          const response = await request(app).get('/5/styles');
+          const sku = response.body.results[0].skus['25'];
 
-        ].forEach( property =>{
-          let propName = property[0];
-          let propType = property[1];
-          expect(sku).toHaveProperty(propName);
-          expect( typeof sku[propName] ).toBe( propType );
-        });
+          [
+            ['quantity', 'number'],
+            ['size', 'string'],
+
+          ].forEach( property =>{
+            let propName = property[0];
+            let propType = property[1];
+            expect(sku).toHaveProperty(propName);
+            expect( typeof sku[propName] ).toBe( propType );
+          });
+
+        })
       });
 
     });
