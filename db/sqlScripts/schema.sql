@@ -49,9 +49,29 @@ CREATE TABLE related (
   related_product_id INTEGER
 );
 
+CREATE TABLE old_cart (
+  id INTEGER,
+  user_session INTEGER,
+  product_id INTEGER,
+  active BOOLEAN
+);
+
+CREATE TABLE cart (
+  id SERIAL PRIMARY KEY,
+  user_session INTEGER,
+  product_id INTEGER,
+  active BOOLEAN
+);
+
 \COPY products FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/products.csv' DELIMITER ',' CSV HEADER;
 \COPY styles FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/styles.csv' DELIMITER ',' CSV HEADER;
 \COPY skus FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/skus.csv' DELIMITER ',' CSV HEADER;
 \COPY features FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/features.csv' DELIMITER ',' CSV HEADER;
 \COPY photos FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/photos-edited.csv' DELIMITER ',' CSV HEADER;
 \COPY related FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/related.csv' DELIMITER ',' CSV HEADER;
+\COPY old_cart FROM '/Users/sampool/Library/Mobile Documents/com~apple~CloudDocs/Media Projects/Hack Reactor/course/Capstones/sdc/products/db/starterData/cart.csv' DELIMITER ',' CSV HEADER;
+
+INSERT INTO cart
+(user_session, product_id, active)
+SELECT user_session, product_id, active
+FROM old_cart;

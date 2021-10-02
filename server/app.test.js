@@ -1,5 +1,9 @@
-const {app} = require('./app');
+// Utils
 const request = require('supertest');
+const {expectPropsAndTypes} = require('../utils/testUtils');
+
+// App
+const {app} = require('./app');
 
 describe('GET /products', ()=>{
 
@@ -96,10 +100,14 @@ describe('GET /products/:product_id', ()=>{
 
 describe('GET /products/:product_id/styles', ()=>{
 
+  let response;
   jest.setTimeout(90 * 1000);
 
-  it('should return an object with the correct properties', async ()=>{
-    const response = await request(app).get('/products/5/styles');
+  beforeAll( async()=>{
+    response = await request(app).get('/products/5/styles');
+  })
+
+  it('should return an object with the correct properties', ()=>{
     const data = response.body;
     expect( typeof data ).toBe( 'object' );
     expect( data ).toHaveProperty( 'product_id' );
@@ -110,11 +118,9 @@ describe('GET /products/:product_id/styles', ()=>{
 
   describe('"results" array entry', ()=>{
 
-    it('should be an object with the correct properties', async ()=>{
-      const response = await request(app).get('/products/5/styles');
+    it('should be an object with the correct properties', ()=>{
       const result = response.body.results[0];
-
-      [
+      let propsAndTypes = [
         ['style_id', 'number'],
         ['name', 'string'],
         ['original_price', 'string'],
@@ -123,93 +129,68 @@ describe('GET /products/:product_id/styles', ()=>{
         ['photos', 'object'],
         ['skus', 'object'],
 
-      ].forEach( property =>{
-        let propName = property[0];
-        let propType = property[1];
-        expect(result).toHaveProperty(propName);
-        expect( typeof result[propName] ).toBe( propType );
-      });
-
+      ];
+      expectPropsAndTypes(result, propsAndTypes);
       expect( result ).toHaveProperty( 'photos' );
       expect( Array.isArray( result['photos'] ) ).toBe( true );
     });
 
     describe('"photos" array entry', ()=> {
 
-      it('should be an object with the correct properties', async ()=>{
-        const response = await request(app).get('/products/5/styles');
+      it('should be an object with the correct properties', ()=>{
         const photo = response.body.results[0].photos[0];
         expect( typeof photo ).toBe( 'object' );
-        [
+        let propsAndTypes = [
           ['thumbnail_url','string'],
           ['url','string']
-        ].forEach( property =>{
-          let propName = property[0];
-          let propType = property[1];
-          expect( photo ).toHaveProperty( propName );
-          expect( typeof photo[propType] ).toBe( propType );
-        })
+        ];
+        expectPropsAndTypes( photo, propsAndTypes );
       });
       
     });
 
     describe('"skus" object', ()=>{
 
-      it('should be an object with the correct properties', async ()=>{
-        const response = await request(app).get('/products/5/styles');
+      it('should be an object with the correct properties', ()=>{
         const skus = response.body.results[0].skus;
-
-        [
-          ['25', 'object'],
-          ['26', 'object'],
-          ['27', 'object'],
-          ['28', 'object'],
-          ['29', 'object'],
-          ['30', 'object'],
-
-        ].forEach( property =>{
-          let propName = property[0];
-          let propType = property[1];
-          expect(skus).toHaveProperty(propName);
-          expect( typeof skus[propName] ).toBe( propType );
-        });
-
-        expect( result ).toHaveProperty( 'photos' );
-        expect( Array.isArray( result[photos] ) ).toBe( true );
+        let propsAndTypes = [
+          ['127', 'object'],
+          ['128', 'object'],
+          ['129', 'object'],
+          ['130', 'object'],
+          ['131', 'object'],
+          ['132', 'object'],
+          ['133', 'object'],
+          ['134', 'object'],
+          ['135', 'object'],
+          ['136', 'object'],
+          ['137', 'object'],
+        ];
+        expectPropsAndTypes(skus, propsAndTypes)
       });
 
       describe('"skus" entry', ()=>{
-
-        it('should be an object with the correct properties', async()=>{
-          const response = await request(app).get('/products/5/styles');
-          const sku = response.body.results[0].skus['25'];
-
-          [
+        it('should be an object with the correct properties', ()=>{
+          const sku = response.body.results[0].skus['127'];
+          let propsAndTypes = [
             ['quantity', 'number'],
             ['size', 'string'],
-
-          ].forEach( property =>{
-            let propName = property[0];
-            let propType = property[1];
-            expect(sku).toHaveProperty(propName);
-            expect( typeof sku[propName] ).toBe( propType );
-          });
-
-        })
+          ];
+          expectPropsAndTypes(sku, propsAndTypes);
+        });
       });
-
     });
-
   })
 });
 
 describe('GET /products/:product_id/related', ()=>{
-
-  it('should return an array of numbers', async ()=>{
-    const response = await request(app).get('/products/5/related');
+  let response;
+  beforeAll( async () =>{
+    response = await request(app).get('/products/5/related');
+  })
+  it('should return an array of numbers', ()=>{
     const data = response.body;
     expect( Array.isArray( data ) ).toBe( true );
     expect( typeof data[0] ).toBe( 'number' );
   });
-
 });
