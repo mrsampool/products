@@ -6,10 +6,13 @@ describe('Related Model', ()=> {
 
     it('should return an array of integers', () => {
       return related.queryByProductId(5)
-      .then(rows => {
-        console.log(rows);
-        expect( Array.isArray( rows ) ).toBe( true );
-        expect( rows.length ).toBeTruthy();
+      .then(related => {
+        console.log(related);
+        expect( Array.isArray( related ) ).toBe( true );
+        expect( related.length ).toBeTruthy();
+        related.forEach( item =>{
+          expect( typeof item ).toBe( 'number' );
+        })
       });
     });
   });

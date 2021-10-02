@@ -1,6 +1,4 @@
-const products = require('../db/models/products');
-const styles = require('../db/models/styles');
-const skus = require('../db/models/skus');
+const {products, styles, related} = require('../db/models');
 
 module.exports = {
 
@@ -40,6 +38,11 @@ module.exports = {
       });
     })
     .catch( err => console.log(err) );
+  },
+
+  getRelatedProducts: (req, res, next) => {
+    related.queryByProductId(req.params.product_id)
+    .then( related => res.status(200).send(related) );
   }
 
 }
