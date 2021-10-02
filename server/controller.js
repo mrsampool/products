@@ -5,7 +5,13 @@ const skus = require('../db/models/skus');
 module.exports = {
 
   getProducts: (req, res, next) => {
-    products.queryAll()
+    let limit = 5;
+    let offset = 0;
+    if (req.query){
+      if (req.query.count){ limit = req.query.count }
+      if (req.query.page){ offset = (Number(req.query.page) - 1) * limit }
+    }
+    products.queryAll(limit, offset)
     .then( data => {
       console.log(data.rows);
       res.status(200).send(data.rows)
@@ -24,9 +30,14 @@ module.exports = {
 
   getProductStyles: (req, res, next) => {
 
-    styles.queryByProductId(req.params.product_id)
-    .then( data => {
-      res.status(200).send(data);
+    let productId = req.params.product_id;
+
+    styles.queryByProductId(productId)
+    .then( rows => {
+      res.status(200).send({
+        product_id: productId,
+        results: rows
+      });
     })
     .catch( err => console.log(err) );
   }

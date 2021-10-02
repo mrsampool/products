@@ -1,13 +1,14 @@
 const {app} = require('./app');
 const request = require('supertest');
 
-describe('GET /', ()=>{
+describe('GET /products', ()=>{
 
   it('should return an array of objects with the correct properties', async ()=>{
-    const response = await request(app).get('/');
+    const response = await request(app).get('/products');
     const data = response.body;
     expect(Array.isArray(data)).toBe(true );
     const entry = data[0];
+    expect(entry.id).toBe(1);
     [
       ['id', 'number'],
       ['name', 'string'],
@@ -24,12 +25,32 @@ describe('GET /', ()=>{
     })
   });
 
+  describe('GET /products?count=15', ()=>{
+
+    it('should return an array of 15 product objects', async ()=>{
+      const response = await request(app).get('/products?count=15');
+      const data = response.body;
+      expect(data.length).toBe(15 );
+    });
+
+  });
+
+  describe('GET /products?page=3', ()=>{
+
+    it('should return the 3rd page of results', async ()=>{
+      const response = await request(app).get('/products?page=3')
+      const data = response.body;
+      expect( data[0].id ).toBe( 11 );
+    });
+
+  });
+
 });
 
-describe('GET /:product_id', ()=>{
+describe('GET /products/:product_id', ()=>{
 
   it('should return an object with the correct properties', async ()=>{
-    const response = await request(app).get('/5');
+    const response = await request(app).get('/products/5');
     const data = response.body;
     expect( typeof data ).toBe( 'object' );
     console.log(data);
@@ -50,7 +71,7 @@ describe('GET /:product_id', ()=>{
   });
 
   it('should include a "features" array of objects with the correct properties', async ()=>{
-    const response = await request(app).get('/5');
+    const response = await request(app).get('/products/5');
     const data = response.body;
     expect( data ).toHaveProperty( 'features' );
     let {features} = data;
@@ -73,10 +94,12 @@ describe('GET /:product_id', ()=>{
 
 });
 
-describe('GET /:product_id/styles', ()=>{
+describe('GET /products/:product_id/styles', ()=>{
+
+  jest.setTimeout(90 * 1000);
 
   it('should return an object with the correct properties', async ()=>{
-    const response = await request(app).get('/5/styles');
+    const response = await request(app).get('/products/5/styles');
     const data = response.body;
     expect( typeof data ).toBe( 'object' );
     expect( data ).toHaveProperty( 'product_id' );
@@ -88,7 +111,7 @@ describe('GET /:product_id/styles', ()=>{
   describe('"results" array entry', ()=>{
 
     it('should be an object with the correct properties', async ()=>{
-      const response = await request(app).get('/5/styles');
+      const response = await request(app).get('/products/5/styles');
       const result = response.body.results[0];
 
       [
@@ -108,13 +131,13 @@ describe('GET /:product_id/styles', ()=>{
       });
 
       expect( result ).toHaveProperty( 'photos' );
-      expect( Array.isArray( result[photos] ) ).toBe( true );
+      expect( Array.isArray( result['photos'] ) ).toBe( true );
     });
 
     describe('"photos" array entry', ()=> {
 
       it('should be an object with the correct properties', async ()=>{
-        const response = await request(app).get('/5/styles');
+        const response = await request(app).get('/products/5/styles');
         const photo = response.body.results[0].photos[0];
         expect( typeof photo ).toBe( 'object' );
         [
@@ -133,7 +156,7 @@ describe('GET /:product_id/styles', ()=>{
     describe('"skus" object', ()=>{
 
       it('should be an object with the correct properties', async ()=>{
-        const response = await request(app).get('/5/styles');
+        const response = await request(app).get('/products/5/styles');
         const skus = response.body.results[0].skus;
 
         [
@@ -158,7 +181,7 @@ describe('GET /:product_id/styles', ()=>{
       describe('"skus" entry', ()=>{
 
         it('should be an object with the correct properties', async()=>{
-          const response = await request(app).get('/5/styles');
+          const response = await request(app).get('/products/5/styles');
           const sku = response.body.results[0].skus['25'];
 
           [
@@ -180,10 +203,10 @@ describe('GET /:product_id/styles', ()=>{
   })
 });
 
-describe('GET /:product_id/related', ()=>{
+describe('GET /products/:product_id/related', ()=>{
 
   it('should return an array of numbers', async ()=>{
-    const response = await request(app).get('/5/related');
+    const response = await request(app).get('/products/5/related');
     const data = response.body;
     expect( Array.isArray( data ) ).toBe( true );
     expect( typeof data[0] ).toBe( 'number' );

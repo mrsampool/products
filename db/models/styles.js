@@ -9,17 +9,35 @@ module.exports = {
       pool.query(`
         SELECT
           style_id,
-          product_id,
           name,
           original_price,
           sale_price,
-          default_
-        FROM styles WHERE product_id=$1;
-        `, [id])
+          default_ AS "default?",
 
-      .then( data => {
-        console.log(data.rows)
-        resolve({ product_id: id, results: data.rows } );
+          (SELECT array(
+            SELECT json_build_object(
+              'thumbnail_url', thumbnail_url,
+              'url', url
+            ) FROM photos WHERE photos.style_id=styles.style_id
+          ) AS photos),
+
+          (SELECT jsonb_object_agg(
+            id, json_build_object(
+              'quantity', quantity,
+              'size', size
+            )
+          ) AS "skus"
+          FROM skus
+          WHERE skus.style_id=styles.style_id)
+
+        FROM styles
+        WHERE product_id=$1;
+        `,
+        [id]
+      )
+
+      .then( ({rows}) => {
+        resolve( rows  );
       })
       .catch( reject );
     });
