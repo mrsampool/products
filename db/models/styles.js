@@ -31,7 +31,7 @@ module.exports = {
           WHERE skus.style_id=styles.style_id)
 
         FROM styles
-        WHERE product_id=5;
+        WHERE product_id=$1;
         `,
         [id]
       )
