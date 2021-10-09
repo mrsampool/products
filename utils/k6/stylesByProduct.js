@@ -6,6 +6,6 @@ export const options = {
 };
 export default function () {
   let productId = Math.floor(Math.random() * 1000000);
-  http.get(`http://ec2-54-153-113-93.us-west-1.compute.amazonaws.com/products/${productId}/styles`);
+  http.get(`http://ec2-184-169-237-1.us-west-1.compute.amazonaws.com/products/${productId}/styles`);
   sleep(1);
 }
